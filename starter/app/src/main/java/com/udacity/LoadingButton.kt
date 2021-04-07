@@ -49,12 +49,13 @@ class LoadingButton @JvmOverloads constructor(
         typeface = Typeface.create( "", Typeface.BOLD)
     }
 
+    private var buttonLoadingColor = ContextCompat.getColor(context, R.color.colorPrimaryDark)
     private val buttonAnimationPaint = Paint().apply {
-        color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
         style = Paint.Style.FILL
     }
 
-    private val arcPaint = Paint().apply { color = ContextCompat.getColor(context, R.color.colorAccent) }
+    private var arcLoadingColor = ContextCompat.getColor(context, R.color.colorAccent)
+    private val arcPaint = Paint()
 
     private var arcDiameter = 0F
     private var arcMargin = 0F
@@ -65,7 +66,7 @@ class LoadingButton @JvmOverloads constructor(
         textSize = 24F * resources.displayMetrics.scaledDensity
     }
 
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
+    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { _, _, new ->
         when(new) {
             ButtonState.Loading -> {
                 buttonLabel = resources.getString(R.string.button_loading)
@@ -92,6 +93,20 @@ class LoadingButton @JvmOverloads constructor(
 
     init {
         isClickable = true
+
+        context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.LoadingButton,
+                0,
+                0
+        ).apply {
+            try {
+                buttonAnimationPaint.color = getColor(R.styleable.LoadingButton_buttonLoadingColor, buttonLoadingColor)
+                arcPaint.color = getColor(R.styleable.LoadingButton_arcLoadingColor, arcLoadingColor)
+            } finally {
+                recycle()
+            }
+        }
     }
 
 
@@ -144,6 +159,26 @@ class LoadingButton @JvmOverloads constructor(
 
     fun setState(state: ButtonState){
         this.buttonState = state
+    }
+
+    fun buttonLoadingColor() : Int {
+        return buttonLoadingColor
+    }
+
+    fun setButtonLoadingColor(color: Int){
+        buttonLoadingColor = color
+        invalidate()
+        requestLayout()
+    }
+
+    fun arcLoadingColor() : Int {
+        return arcLoadingColor
+    }
+
+    fun setArcLoadingcolor(color: Int) {
+        arcLoadingColor = color
+        invalidate()
+        requestLayout()
     }
 
 }
