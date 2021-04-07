@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.udacity.Constants.ANIMATION_DURATION
 import kotlin.properties.Delegates
 
@@ -27,6 +28,7 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private var buttonLabel : String = resources.getString(R.string.button_name)
+
     private var buttonProgress = 0F
         set(value) {
             field = value
@@ -41,18 +43,18 @@ class LoadingButton @JvmOverloads constructor(
     private var valueAnimator = ValueAnimator()
 
     private val buttonPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = resources.getColor(R.color.colorPrimary)
+        color = ContextCompat.getColor(context, R.color.colorPrimary)
         style = Paint.Style.FILL
         textAlign = Paint.Align.CENTER
         typeface = Typeface.create( "", Typeface.BOLD)
     }
 
     private val buttonAnimationPaint = Paint().apply {
-        color = resources.getColor(R.color.colorPrimaryDark)
+        color = ContextCompat.getColor(context, R.color.colorPrimaryDark)
         style = Paint.Style.FILL
     }
 
-    private val arcPaint = Paint().apply { color = resources.getColor(R.color.colorAccent) }
+    private val arcPaint = Paint().apply { color = ContextCompat.getColor(context, R.color.colorAccent) }
 
     private var arcDiameter = 0F
     private var arcMargin = 0F
@@ -102,9 +104,9 @@ class LoadingButton @JvmOverloads constructor(
             canvas?.drawRect(0F, 0F, buttonProgress, heightSize.toFloat(), buttonAnimationPaint)
 
             canvas?.drawArc(
-                    widthSize - arcDiameter - 100F,
+                    widthSize - arcDiameter - arcMargin,
                     arcMargin,
-                    widthSize - 100F,
+                    widthSize - arcMargin,
                     arcMargin + arcDiameter,
                     0F,
                     arcProgress,

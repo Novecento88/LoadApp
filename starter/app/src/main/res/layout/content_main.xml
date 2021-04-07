@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/radio_glide"
+            android:text="@string/glide_repository"
             android:textSize="18sp"
             />
 
@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/radio_udacity"
+            android:text="@string/udacity_repository"
             android:textSize="18sp"
             />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="@string/radio_retrofit"
+            android:text="@string/retrofit_repository"
             android:textSize="18sp"
             />
 

@@ -17,6 +17,8 @@ import androidx.core.app.NotificationCompat
 import com.udacity.Constants.GLIDE_URL
 import com.udacity.Constants.RETROFIT_URL
 import com.udacity.Constants.UDACITY_PROJECT_URL
+import com.udacity.utils.cancelNotifications
+import com.udacity.utils.parseDownloadStatus
 import com.udacity.utils.sendNotification
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -27,11 +29,10 @@ class MainActivity : AppCompatActivity() {
     private var downloadID: Long = 0
     private var url : String = ""
     private var notificationMessageBody = ""
+    private var fileName = ""
 
     private lateinit var notificationManager: NotificationManager
     private lateinit var downloadManager: DownloadManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,16 +53,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.radio_glide -> {
                     url = GLIDE_URL
                     notificationMessageBody = getString(R.string.notification_body_glide)
+                    fileName = getString(R.string.glide_repository)
                 }
 
                 R.id.radio_udacity -> {
                     url = UDACITY_PROJECT_URL
                     notificationMessageBody = getString(R.string.notification_body_udacity)
+                    fileName = getString(R.string.udacity_repository)
                 }
 
                 R.id.radio_retrofit -> {
                     url = RETROFIT_URL
                     notificationMessageBody = getString(R.string.notification_body_retrofit)
+                    fileName = getString(R.string.retrofit_repository)
                 }
 
                 else -> {
@@ -88,7 +92,8 @@ class MainActivity : AppCompatActivity() {
                 val query = downloadManager.query(DownloadManager.Query().setFilterById(downloadID))
 
                 if (context != null && query.moveToFirst()) {
-                    notificationManager.sendNotification(context, notificationMessageBody)
+                    val downloadStatus = parseDownloadStatus(context, query.getInt(query.getColumnIndex(DownloadManager.COLUMN_STATUS)))
+                    notificationManager.sendNotification(context, notificationMessageBody, fileName, downloadStatus)
                 }
             }
         }
@@ -125,6 +130,8 @@ class MainActivity : AppCompatActivity() {
 
         downloadID =
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
+
+        notificationManager.cancelNotifications()
         custom_button.setState(ButtonState.Loading)
     }
 
