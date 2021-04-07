@@ -32,4 +32,14 @@
     <string name="file_name_title">File name:</string>
     <string name="download_status_title">Download status:</string>
 
+    <string name="confirm_button_title">OK</string>
+
+    <string name="download_image_content_description">An icon representing the Download action.</string>
+    <string name="repositories_radio_group_content_description">All the repositories you can chose to download.</string>
+    <string name="glide_radio_content_description">Link for Glide repository.</string>
+    <string name="udacity_radio_content_description">Link for Udacity repository.</string>
+    <string name="retrofit_radio_content_description">Link for Retrofit repository.</string>
+    <string name="download_button_content_description">Tap on this button to download the selected repository.</string>
+    <string name="confirm_button_content_description">tap on this button to go back to the MainActivity</string>
+
 </resources>

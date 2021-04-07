@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.udacity.Constants.DOWNLOAD_STATUS
@@ -15,9 +16,21 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         intent.apply {
-            file_text_view_description.text = getStringExtra(FILE_NAME)
+            val fileDescription = getStringExtra(FILE_NAME)
+            file_text_view_description.text = fileDescription
+            file_text_view_description.contentDescription = fileDescription
 
-            download_status_text_view_description.text = getStringExtra(DOWNLOAD_STATUS)
+            val downloadStatus = getStringExtra(DOWNLOAD_STATUS)
+            download_status_text_view_description.text = downloadStatus
+            download_status_text_view_description.contentDescription = downloadStatus
+        }
+
+        confirm_button.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
+
+            startActivity(intent)
         }
     }
 
