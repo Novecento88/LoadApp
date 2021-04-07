@@ -13,7 +13,7 @@
         app:autoTransition="animateToEnd"
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="2000">
+        app:duration="1500">
 
         <KeyFrameSet>
 
@@ -39,8 +39,8 @@
 
             <KeyAttribute
                 motion:framePosition="50"
-                android:scaleX="1.2"
-                android:scaleY="1.2"
+                android:scaleX="1.4"
+                android:scaleY="1.4"
                 app:motionTarget="@+id/confirm_button"/>
 
         </KeyFrameSet>
