@@ -16,6 +16,7 @@ class LoadingButton @JvmOverloads constructor(
     private var heightSize = 0
 
     private var textHeight = 0F
+    private var textWidth = 0F
     private var textOffset = 0F
 
     private var bounds = RectF().apply {
@@ -26,14 +27,18 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private var buttonLabel : String = resources.getString(R.string.button_name)
-    private var loadingProgress = 0F
+    private var buttonProgress = 0F
+        set(value) {
+            field = value
+            invalidate()
+        }
+    private var arcProgress = 0F
         set(value) {
             field = value
             invalidate()
         }
 
-    private var buttonAnimator = ValueAnimator()
-    private var circleAnimator = ValueAnimator()
+    private var valueAnimator = ValueAnimator()
 
     private val buttonPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = resources.getColor(R.color.colorPrimary)
@@ -49,6 +54,9 @@ class LoadingButton @JvmOverloads constructor(
 
     private val arcPaint = Paint().apply { color = resources.getColor(R.color.colorAccent) }
 
+    private var arcDiameter = 0F
+    private var arcMargin = 0F
+
     private val textPaint = Paint().apply {
         color = Color.WHITE
         textAlign = Paint.Align.CENTER
@@ -59,30 +67,22 @@ class LoadingButton @JvmOverloads constructor(
         when(new) {
             ButtonState.Loading -> {
                 buttonLabel = resources.getString(R.string.button_loading)
-                buttonAnimator = ValueAnimator.ofFloat(0F, widthSize.toFloat()).apply {
-                    duration = ANIMATION_DURATION
-                    repeatMode = ValueAnimator.REVERSE
-                    repeatCount = ValueAnimator.INFINITE
-
-                    addUpdateListener {
-                        loadingProgress = animatedValue as Float
-                    }
-
-                    start()
-                }
-
-                circleAnimator = ValueAnimator.ofFloat(0F, 360F).apply {
+                valueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
                     duration = ANIMATION_DURATION
                     repeatMode = ValueAnimator.RESTART
                     repeatCount = ValueAnimator.INFINITE
+
+                    addUpdateListener {
+                        buttonProgress = animatedValue as Float * measuredWidth.toFloat()
+                        arcProgress = animatedValue as Float * 360F
+                    }
                     start()
                 }
             }
 
             ButtonState.Completed -> {
                 buttonLabel = resources.getString(R.string.button_name)
-                buttonAnimator.end()
-                circleAnimator.end()
+                valueAnimator.end()
             }
         }
     }
@@ -99,9 +99,18 @@ class LoadingButton @JvmOverloads constructor(
         canvas?.drawRect(0F, 0F, widthSize.toFloat(), heightSize.toFloat(), buttonPaint)
 
         if(buttonState == ButtonState.Loading){
-            canvas?.drawRect(0F, 0F, loadingProgress, heightSize.toFloat(), buttonAnimationPaint)
+            canvas?.drawRect(0F, 0F, buttonProgress, heightSize.toFloat(), buttonAnimationPaint)
 
-            //canvas?.drawArc()
+            canvas?.drawArc(
+                    widthSize - arcDiameter - 100F,
+                    arcMargin,
+                    widthSize - 100F,
+                    arcMargin + arcDiameter,
+                    0F,
+                    arcProgress,
+                    true,
+                    arcPaint
+            )
         }
 
         canvas?.drawText(buttonLabel, bounds.centerX(), bounds.centerY() + textOffset, textPaint)
@@ -119,7 +128,11 @@ class LoadingButton @JvmOverloads constructor(
         heightSize = h
 
         textHeight = (textPaint.descent().toDouble() - textPaint.ascent()).toFloat()
+        textWidth = textPaint.measureText(buttonLabel)
         textOffset = (textHeight / 2) - textPaint.descent()
+
+        arcDiameter = heightSize * 0.6F
+        arcMargin = heightSize * 0.2F
 
         bounds.right = widthSize.toFloat()
         bounds.bottom = heightSize.toFloat()
