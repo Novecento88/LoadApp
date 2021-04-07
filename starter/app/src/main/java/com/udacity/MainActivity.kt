@@ -75,9 +75,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        custom_button.setButtonLoadingColor(R.color.colorPrimaryDark)
-        custom_button.setArcLoadingcolor(R.color.colorAccent)
-
         custom_button.setOnClickListener {
             if(radio_group.checkedRadioButtonId == -1){
                 return@setOnClickListener

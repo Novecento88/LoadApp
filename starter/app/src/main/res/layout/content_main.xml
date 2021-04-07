@@ -67,6 +67,8 @@
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"
+        app:buttonLoadingColor="@color/colorPrimaryDark"
+        app:arcLoadingColor="@color/colorAccent"
         app:layout_constraintTop_toBottomOf="@+id/radio_group"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

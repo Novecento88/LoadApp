@@ -161,6 +161,9 @@ class LoadingButton @JvmOverloads constructor(
         this.buttonState = state
     }
 
+    /*Helper methods to set and retrieve custom attributes values programmatically.
+    Not used, but implemented just for demonstration (as per official documentation).*/
+
     fun buttonLoadingColor() : Int {
         return buttonLoadingColor
     }
